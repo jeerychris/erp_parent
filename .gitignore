@@ -101,4 +101,5 @@ buildNumber.properties
 
 .idea/
 .project
-erp_web/src/main/webapp
+erp_web/src/main/webapp/ui/demo
+erp_web/src/main/webapp/ui/src
