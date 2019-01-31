@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>部门管理</title>
+<title>仓库操作记录管理</title>
 <link rel="stylesheet" type="text/css" href="ui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
 <script type="text/javascript" src="ui/jquery.min.js"></script>
@@ -11,11 +11,15 @@
 <script type="text/javascript" src="ui/jquery.serializejson.min.js"></script>
 <script type="text/javascript" src="js/crud.js"></script>
 <script type="text/javascript">
-	var name="dep";
+	var name="storeoper";
 	var columns=[[
 	  		    {field:'uuid',title:'编号',width:100},
-	  		    {field:'name',title:'部门名称',width:100},
-	  		    {field:'tele',title:'联系电话',width:100},
+	  		    {field:'empuuid',title:'操作员工编号',width:100},
+	  		    {field:'opertime',title:'操作日期',width:100},
+	  		    {field:'storeuuid',title:'仓库编号',width:100},
+	  		    {field:'goodsuuid',title:'商品编号',width:100},
+	  		    {field:'num',title:'数量',width:100},
+	  		    {field:'type',title:'1：入库 2：出库',width:100},
 
 				{field:'-',title:'操作',width:200,formatter: function(value,row,index){
 					var oper = "<a href=\"javascript:void(0)\" onclick=\"edit(" + row.uuid + ')">修改</a>';
@@ -30,8 +34,12 @@
 <div class="easyui-panel" style="padding-left:4px;border-bottom:0px;">
 	<div style="height:2px;"></div>
 	<form id="searchForm">
-			部门名称：<input name="t1.name" >
-	联系电话：<input name="t1.tele" >
+			操作员工编号：<input name="t1.empuuid" >
+	操作日期：<input name="t1.opertime" >
+	仓库编号：<input name="t1.storeuuid" >
+	商品编号：<input name="t1.goodsuuid" >
+	数量：<input name="t1.num" >
+	1：入库 2：出库：<input name="t1.type" >
 
 		<button type="button" id="btnSearch">查询</button>
 	</form>
@@ -45,10 +53,22 @@
 
 		<table>
 						<tr>
-				<td>部门名称</td><td><input name="t.name"> </td>
+				<td>操作员工编号</td><td><input name="t.empuuid"> </td>
 			</tr>
 			<tr>
-				<td>联系电话</td><td><input name="t.tele"> </td>
+				<td>操作日期</td><td><input name="t.opertime"> </td>
+			</tr>
+			<tr>
+				<td>仓库编号</td><td><input name="t.storeuuid"> </td>
+			</tr>
+			<tr>
+				<td>商品编号</td><td><input name="t.goodsuuid"> </td>
+			</tr>
+			<tr>
+				<td>数量</td><td><input name="t.num"> </td>
+			</tr>
+			<tr>
+				<td>1：入库 2：出库</td><td><input name="t.type"> </td>
 			</tr>
 
 		</table>
