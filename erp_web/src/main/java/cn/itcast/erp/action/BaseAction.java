@@ -1,10 +1,10 @@
 package cn.itcast.erp.action;
 
 import cn.itcast.erp.biz.IBaseBiz;
-import cn.itcast.erp.util.AjaxReturn;
-import cn.itcast.erp.util.Util;
+import cn.itcast.erp.entity.Emp;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.opensymphony.xwork2.ActionContext;
 import org.apache.struts2.ServletActionContext;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,162 +14,50 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 通用Action, 封装通用的功能
+ * 通用Action类
  *
- * @param <T> 实体类
+ * @param <T>
  * @author Administrator
  */
-@SuppressWarnings("unused")
 public class BaseAction<T> {
 
-    /**
-     * 主键uuid，主要用于查询和删除
-     */
-    private String uuid;
-    /**
-     * 主键id，主要用于查询和删除
-     */
-    private Long id;
-    /**
-     * 分页功能中的查询页码
-     */
-    private int page;
-
-    /**
-     * 分页功能中的每页显示的数量
-     */
-    private int rows;
-
-    /**
-     * 主要用于新增和修改的传参
-     */
-    private T t;
-    /**
-     * 扩展查询条件，当t1, t2不够用时使用
-     */
-    private Object[] params;
-
-    /**
-     * 基本业务层
-     */
     private IBaseBiz<T> baseBiz;
 
     public void setBaseBiz(IBaseBiz<T> baseBiz) {
         this.baseBiz = baseBiz;
     }
 
-    public void list() {
-        // 获取所有的商品类型数据
-        List<T> allT = baseBiz.getList(t, params);
+    //属性驱动:条件查询
+    private T t1;
+    private T t2;
+    private Object param;
 
-        // 转换成JSON格式字符串
-        String allTJsonString = JSON.toJSONString(allT, SerializerFeature.DisableCircularReferenceDetect);
-        System.out.println(allTJsonString);
-        // 输出到页面
-        Util.write2UI(allTJsonString, ServletActionContext.getResponse());
+    public T getT2() {
+        return t2;
     }
 
-    /**
-     * 分页查询
-     */
-    public void listPage() {
-        // 获取总记录数
-        Long total = baseBiz.getCount(t, params);
-
-        // 分页后结果集
-        List<T> tList = baseBiz.getListByPage(t, getStart(), rows, params);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("total", total);
-        result.put("rows", tList);
-        // 输出到页面
-        Util.write2UI(JSON.toJSONString(result, SerializerFeature.DisableCircularReferenceDetect), ServletActionContext.getResponse());
+    public void setT2(T t2) {
+        this.t2 = t2;
     }
 
-    public void add() {
-        try {
-            baseBiz.add(t);
-            write(ajaxReturn(true, "新增成功"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            write(ajaxReturn(false, "新增失败"));
-        }
+    public Object getParam() {
+        return param;
     }
 
-    public void edit() {
-        try {
-            baseBiz.update(t);
-            write(ajaxReturn(true, "更新成功"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            write(ajaxReturn(false, "更新失败"));
-        }
+    public void setParam(Object param) {
+        this.param = param;
     }
 
-    public void get() {
-        // {t.id:23}
-        T _t = baseBiz.get(id);
-        String json = JSON.toJSONStringWithDateFormat(_t, "yyyy-MM-dd", SerializerFeature.WriteDateUseDateFormat);
-        Util.write2UI(Util.addPrefix2JsonString(json, "t"), ServletActionContext.getResponse());
-        // {t.id:1,t.name:''}
+    public T getT1() {
+        return t1;
     }
 
-    public void delete() {
-        AjaxReturn resunt = null;
-        try {
-            // 调用业务删除商品类型
-            baseBiz.delete(uuid);
-            resunt = new AjaxReturn(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            resunt = new AjaxReturn(e.getMessage());
-        }
-        Util.write2UI(resunt.toString(), ServletActionContext.getResponse());
+    public void setT1(T t1) {
+        this.t1 = t1;
     }
 
-    public void write(String json) {
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.setContentType("application/json;charset=utf-8");
-        response.setCharacterEncoding("UTF-8");
-        try {
-            response.getWriter().write(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String ajaxReturn(boolean success, String message) {
-
-        Map map = new HashMap();
-        map.put("success", success);
-        map.put("message", message);
-        String json = JSON.toJSONString(map);
-
-        return json;
-
-
-    }
-
-    private int getStart() {
-        // page=2, rows=10, start=10
-        return (this.page - 1) * this.rows;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private int page;//页码
+    private int rows;//每页的记录数
 
     public int getPage() {
         return page;
@@ -187,6 +75,36 @@ public class BaseAction<T> {
         this.rows = rows;
     }
 
+    /**
+     * 条件查询
+     */
+    public void list() {
+        List<T> list = baseBiz.getList(t1, t2, param);
+        //把部门列表转JSON字符串
+        String listString = JSON.toJSONString(list, SerializerFeature.DisableCircularReferenceDetect);
+        write(listString);
+    }
+
+    public void listByPage() {
+        //System.out.println("页码：" + page + " 记录数:" + rows);
+        int firstResult = (page - 1) * rows;
+        List<T> list = baseBiz.getListByPage(t1, t2, param, firstResult, rows);
+        long total = baseBiz.getCount(t1, t2, param);
+        //{total: total, rows:[]}
+        Map<String, Object> mapData = new HashMap<String, Object>();
+        mapData.put("total", total);
+        mapData.put("rows", list);
+        //把部门列表转JSON字符串
+        //DisableCircularReferenceDetect禁用循环引用保护
+        String listString = JSON.toJSONString(mapData, SerializerFeature.DisableCircularReferenceDetect);
+        write(listString);
+    }
+
+    /**
+     * 新增，修改
+     */
+    private T t;
+
     public T getT() {
         return t;
     }
@@ -195,11 +113,138 @@ public class BaseAction<T> {
         this.t = t;
     }
 
-    public Object[] getParams() {
-        return params;
+    public void add() {
+        //{"success":true,"message":""}
+        //返回前端的JSON数据
+        Map<String, Object> rtn = new HashMap<String, Object>();
+        try {
+            baseBiz.add(t);
+            rtn.put("success", true);
+            rtn.put("message", "新增成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            rtn.put("success", false);
+            rtn.put("message", "新增失败");
+        }
+        write(JSON.toJSONString(rtn));
     }
 
-    public void setParams(Object[] params) {
-        this.params = params;
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * 删除
+     *
+     */
+    public void delete() {
+
+        try {
+            baseBiz.delete(id);
+            ajaxReturn(true, "删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ajaxReturn(false, "删除失败");
+        }
+    }
+
+    /**
+     * 通过编辑查询对象
+     */
+    public void get() {
+        T t = baseBiz.get(id);
+        String jsonString = JSON.toJSONStringWithDateFormat(t, "yyyy-MM-dd");
+        System.out.println("转换前：" + jsonString);
+        //{"name":"管理员组","tele":"000011","uuid":1}
+        String jsonStringAfter = mapData(jsonString, "t");
+        System.out.println("转换后：" + jsonStringAfter);
+        write(jsonStringAfter);
+    }
+
+    /**
+     * 修改
+     */
+    public void update() {
+        try {
+            baseBiz.update(t);
+            ajaxReturn(true, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ajaxReturn(false, "修改失败");
+        }
+    }
+
+    /**
+     * //{"name":"管理员组","tele":"000011","uuid":1}
+     *
+     * @param jsonString JSON数据字符串
+     * @param prefix     要加上的前缀
+     * @return {"t.name":"管理员组","t.tele":"000011","t.uuid":1}
+     */
+    public String mapData(String jsonString, String prefix) {
+        Map<String, Object> map = JSON.parseObject(jsonString);
+
+        //存储key加上前缀后的值
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        //给每key值加上前缀
+        for (String key : map.keySet()) {
+            if (map.get(key) instanceof Map) {
+                //key值进行拼接
+                Map<String, Object> m2 = (Map<String, Object>) map.get(key);
+                for (String key2 : m2.keySet()) {
+                    dataMap.put(prefix + "." + key + "." + key2, m2.get(key2));
+                }
+            } else {
+                dataMap.put(prefix + "." + key, map.get(key));
+            }
+        }
+        return JSON.toJSONString(dataMap);
+    }
+
+    /**
+     * 返回前端操作结果
+     *
+     * @param success
+     * @param message
+     */
+    public void ajaxReturn(boolean success, String message) {
+        //返回前端的JSON数据
+        Map<String, Object> rtn = new HashMap<String, Object>();
+        rtn.put("success", success);
+        rtn.put("message", message);
+        write(JSON.toJSONString(rtn));
+    }
+
+    /**
+     * 输出字符串到前端
+     *
+     * @param jsonString
+     */
+    public void write(String jsonString) {
+        try {
+            //响应对象
+            HttpServletResponse response = ServletActionContext.getResponse();
+            //设置编码
+            response.setContentType("text/html;charset=utf-8");
+            //输出给页面
+            response.getWriter().write(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取登陆的用户信息
+     *
+     * @return
+     */
+    public Emp getLoginUser() {
+        return (Emp) ActionContext.getContext().getSession().get("loginUser");
     }
 }

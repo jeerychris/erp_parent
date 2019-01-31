@@ -1,3 +1,6 @@
+/**
+ * forward global variable: name, columns.
+ */
 //提交的方法名称
 var method = "";
 var listParam = "";
@@ -30,10 +33,10 @@ $(function(){
 
 	var h = 300;
 	var w = 200;
-	if(typeof(height) != "undefined"){
+	if(height){
 		h = height;
 	}
-	if(typeof(width) != "undefined"){
+	if(width){
 		w = width;
 	}
 	//初始化编辑窗口

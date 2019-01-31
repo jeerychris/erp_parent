@@ -2,83 +2,60 @@ package cn.itcast.erp.dao;
 
 import java.util.List;
 
-
-/**
- * 基本数据访问接口
- *
- * @author Administrator
- */
 public interface IBaseDao<T> {
-
-    /**
-     * 条件查询列表
-     *
-     * @param t1
-     * @return
-     */
-    List<T> getList(T t1, Object... params);
-
-    /**
-     * 条件查询列表(分页)
-     *
-     * @param t1
-     * @return
-     */
-    List<T> getListByPage(T t1, int firstResult, int maxResults, Object... params);
-
-    /**
-     * 统计记录个数
-     *
-     * @param t1
-     * @param params
-     * @return
-     */
-    Long getCount(T t1, Object... params);
-
-
-    /**
-     * 增加
-     *
-     * @param t
-     */
-    void add(T t);
-
-
-    /**
-     * 修改
-     *
-     * @param t
-     */
-    void update(T t);
-
-    /**
-     * 删除
-     *
-     * @param id
-     */
-    void delete(Long id);
-
-    /**
-     * 删除
-     *
-     * @param id
-     */
-    void delete(String id);
-
-    /**
-     * 获取实体
-     *
-     * @param id
-     * @return
-     */
-    T get(Long id);
-
-    /**
-     * 获取实体
-     *
-     * @param id
-     * @return
-     */
-    T get(String id);
-
+	
+	/**
+	 * 条件查询
+	 * @param t1
+	 * @return
+	 */
+	List<T> getList(T t1, T t2, Object param);
+	
+	/**
+	 * 分页查询
+	 * @param t1
+	 * @param t2
+	 * @param param
+	 * @param firstResult
+	 * @param maxResults
+	 * @return
+	 */
+	List<T> getListByPage(T t1, T t2, Object param, int firstResult, int maxResults);
+	
+	/**
+	 * 记录条件查询的总记录数
+	 * @param t1
+	 * @return
+	 */
+	long getCount(T t1, T t2, Object param);
+	
+	/**
+	 * 新增
+	 * @param t
+	 */
+	void add(T t);
+	
+	/**
+	 * 删除
+	 */
+	void delete(Long uuid);
+	
+	/**
+	 * 通过编号查询对象
+	 * @param uuid
+	 * @return
+	 */
+	T get(Long uuid);
+	
+	/**
+	 * 通过编号查询对象
+	 * @param uuid
+	 * @return
+	 */
+	T get(String uuid);
+	
+	/**
+	 * 更新
+	 */
+	void update(T t);
 }
