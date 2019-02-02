@@ -2,6 +2,8 @@ package cn.itcast.erp.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.util.Date;
+
 /**
  * 员工实体类
  *
@@ -18,7 +20,7 @@ public class Emp {
     private String email;//邮件地址
     private String tele;//联系电话
     private String address;//联系地址
-    private java.util.Date birthday;//出生年月日
+    private Date birthday;//出生年月日
     private Dep dep;//部门
 
     public Dep getDep() {

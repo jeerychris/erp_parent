@@ -1,12 +1,12 @@
 package cn.itcast.erp.dao.impl;
-import java.util.List;
 
-import org.apache.shiro.crypto.hash.Md5Hash;
+import cn.itcast.erp.dao.IEmpDao;
+import cn.itcast.erp.entity.Emp;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import cn.itcast.erp.dao.IEmpDao;
-import cn.itcast.erp.entity.Emp;
+
+import java.util.List;
 /**
  * 员工数据访问类
  * @author Administrator
@@ -35,8 +35,8 @@ public class EmpDao extends BaseDao<Emp> implements IEmpDao {
 
 	/**
 	 * 构建查询条件
-	 * @param dep1
-	 * @param dep2
+	 * @param emp1
+	 * @param emp2
 	 * @param param
 	 * @return
 	 */

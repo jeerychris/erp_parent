@@ -1,10 +1,10 @@
 package cn.itcast.erp.biz.impl;
-import org.apache.shiro.crypto.hash.Md5Hash;
 
 import cn.itcast.erp.biz.IEmpBiz;
 import cn.itcast.erp.dao.IEmpDao;
 import cn.itcast.erp.entity.Emp;
 import cn.itcast.erp.exception.ErpException;
+import org.apache.shiro.crypto.hash.Md5Hash;
 /**
  * 员工业务逻辑类
  * @author Administrator
@@ -12,7 +12,7 @@ import cn.itcast.erp.exception.ErpException;
  */
 public class EmpBiz extends BaseBiz<Emp> implements IEmpBiz {
 
-	private int hashIterations = 2;
+	private final int hashIterations = 2;
 	
 	private IEmpDao empDao;
 	
@@ -53,6 +53,7 @@ public class EmpBiz extends BaseBiz<Emp> implements IEmpBiz {
 	/**
 	 * 新增员工
 	 */
+	@Override
 	public void add(Emp emp){
 		//String pwd = emp.getPwd();
 		// source: 原密码

@@ -20,6 +20,8 @@ $(function(){
 				method = "add";
 				//关闭编辑窗口
 				$('#editDlg').dialog('open');
+                //清空表单内容
+                $('#editForm').form('clear');
 			}
 		}]
 	});
@@ -33,12 +35,16 @@ $(function(){
 
 	var h = 300;
 	var w = 200;
-	if(height){
-		h = height;
-	}
-	if(width){
-		w = width;
-	}
+    try {
+        if (height) {
+            h = height;
+        }
+        if (width) {
+            w = width;
+        }
+    } catch (e) {
+        console.log(e.message)
+    }
 	//初始化编辑窗口
 	$('#editDlg').dialog({
 		title: '编辑',//窗口标题

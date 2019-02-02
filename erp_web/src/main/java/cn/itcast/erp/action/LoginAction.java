@@ -1,18 +1,15 @@
 package cn.itcast.erp.action;
 
+import cn.itcast.erp.biz.IEmpBiz;
+import cn.itcast.erp.entity.Emp;
+import com.alibaba.fastjson.JSON;
+import com.opensymphony.xwork2.ActionContext;
+import org.apache.struts2.ServletActionContext;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts2.ServletActionContext;
-
-import com.alibaba.fastjson.JSON;
-import com.opensymphony.xwork2.ActionContext;
-
-import cn.itcast.erp.biz.IEmpBiz;
-import cn.itcast.erp.entity.Emp;
 
 public class LoginAction {
 
@@ -71,6 +68,7 @@ public class LoginAction {
 	 */
 	public void loginOut(){
 		ActionContext.getContext().getSession().remove("loginUser");
+		ajaxReturn(true, "");
 	}
 	
 	/**
@@ -78,9 +76,9 @@ public class LoginAction {
 	 * @param success
 	 * @param message
 	 */
-	public void ajaxReturn(boolean success, String message){
+	private void ajaxReturn(boolean success, String message) {
 		//返回前端的JSON数据
-		Map<String, Object> rtn = new HashMap<String, Object>();
+		Map<String, Object> rtn = new HashMap<>();
 		rtn.put("success",success);
 		rtn.put("message",message);
 		//JSON.toJSONString(rtn) => {"success":true,"message":'超级管理员'}
