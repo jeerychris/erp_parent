@@ -18,8 +18,14 @@
         <property name="ender" /> 
         <property name="supplieruuid" /> 
         <property name="totalmoney" /> 
-        <property name="state" /> 
-        <property name="waybillsn" /> 
- 
+        <property name="state" />
+        <property name="waybillsn"/>
+        <!-- 级联更新  -->
+        <bag name="orderDetails" cascade="save-update" inverse="true">
+            <key column="ordersuuid"></key>
+            <one-to-many class="cn.itcast.erp.entity.Orderdetail"/>
+        </bag>
+
+
     </class>
 </hibernate-mapping>

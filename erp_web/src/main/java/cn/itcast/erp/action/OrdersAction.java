@@ -1,6 +1,11 @@
 package cn.itcast.erp.action;
 import cn.itcast.erp.biz.IOrdersBiz;
+import cn.itcast.erp.entity.Emp;
+import cn.itcast.erp.entity.Orderdetail;
 import cn.itcast.erp.entity.Orders;
+import com.alibaba.fastjson.JSON;
+
+import java.util.List;
 
 /**
  * 订单Action 
@@ -10,10 +15,44 @@ import cn.itcast.erp.entity.Orders;
 public class OrdersAction extends BaseAction<Orders> {
 
 	private IOrdersBiz ordersBiz;
+	private String json;
+
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
+	}
 
 	public void setOrdersBiz(IOrdersBiz ordersBiz) {
 		this.ordersBiz = ordersBiz;
 		super.setBaseBiz(this.ordersBiz);
 	}
 
+	@Override
+	public void add() {
+		Emp loginUser = getLoginUser();
+		if (null == loginUser) {
+			//用户没有登陆，session已失效
+			ajaxReturn(false, "亲！您还没有登陆");
+			return;
+		}
+		try {
+			//System.out.println(json);
+			Orders orders = getT();
+			//订单创建者
+			orders.setCreater(loginUser.getUuid());
+			List<Orderdetail> detailList = JSON.parseArray(json, Orderdetail.class);
+			//订单明细
+			orders.setOrderDetails(detailList);
+			//System.out.println(detailList.size());
+			ordersBiz.add(orders);
+			ajaxReturn(true, "添加订单成功");
+		} catch (Exception e) {
+			ajaxReturn(false, "添加订单失败");
+			e.printStackTrace();
+		}
+
+	}
 }

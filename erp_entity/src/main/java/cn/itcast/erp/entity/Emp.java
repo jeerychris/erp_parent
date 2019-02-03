@@ -2,6 +2,7 @@ package cn.itcast.erp.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -95,12 +96,35 @@ public class Emp {
         this.address = address;
     }
 
-    public java.util.Date getBirthday() {
+    public static void main(String[] args) {
+        Emp emp = new Emp();
+        emp.setUsername("aa");
+        emp.setBirthday(new Date());
+
+        System.out.println(emp);
+    }
+
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(java.util.Date birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
+    @Override
+    public String toString() {
+        return "Emp{" +
+                "uuid=" + uuid +
+                ", username='" + username + '\'' +
+                ", pwd='" + pwd + '\'' +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", email='" + email + '\'' +
+                ", tele='" + tele + '\'' +
+                ", address='" + address + '\'' +
+                ", birthday=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(birthday) +
+                ", dep=" + dep +
+                '}';
+    }
 }
