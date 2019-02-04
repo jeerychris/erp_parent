@@ -1,5 +1,6 @@
 package cn.itcast.erp.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,11 @@ public class Orders {
     private Double totalmoney;//合计金额
     private String state;//采购: 0:未审核 1:已审核, 2:已确认, 3:已入库；销售：0:未出库 1:已出库
     private Long waybillsn;//运单号
+    private String createrName;//下单员名称
+    private String checkerName;//审核员名称
+    private String starterName;//采购员名称
+    private String enderName;//库管员名称
+    private String supplierName;//供应商或客户的名称
     //订单明细
     private List<Orderdetail> orderDetails;
 
@@ -172,23 +178,66 @@ public class Orders {
         this.waybillsn = waybillsn;
     }
 
+    public String getCreaterName() {
+        return createrName;
+    }
+
+    public void setCreaterName(String createrName) {
+        this.createrName = createrName;
+    }
+
+    public String getCheckerName() {
+        return checkerName;
+    }
+
+    public void setCheckerName(String checkerName) {
+        this.checkerName = checkerName;
+    }
+
+    public String getStarterName() {
+        return starterName;
+    }
+
+    public void setStarterName(String starterName) {
+        this.starterName = starterName;
+    }
+
+    public String getEnderName() {
+        return enderName;
+    }
+
+    public void setEnderName(String enderName) {
+        this.enderName = enderName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
     @Override
     public String toString() {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return "Orders{" +
                 "uuid=" + uuid +
-                ", createtime=" + createtime +
-                ", checktime=" + checktime +
-                ", starttime=" + starttime +
-                ", endtime=" + endtime +
+                ", createtime=" + simpleDateFormat.format(createtime) +
+                ", checktime=" + simpleDateFormat.format(checktime) +
+                ", starttime=" + simpleDateFormat.format(starttime) +
+                ", endtime=" + simpleDateFormat.format(endtime) +
                 ", type='" + type + '\'' +
-                ", creater=" + creater +
-                ", checker=" + checker +
-                ", starter=" + starter +
-                ", ender=" + ender +
-                ", supplieruuid=" + supplieruuid +
                 ", totalmoney=" + totalmoney +
                 ", state='" + state + '\'' +
                 ", waybillsn=" + waybillsn +
+                ", createrName='" + createrName + '\'' +
+                ", checkerName='" + checkerName + '\'' +
+                ", starterName='" + starterName + '\'' +
+                ", enderName='" + enderName + '\'' +
+                ", supplierName='" + supplierName + '\'' +
+                ", orderDetails=" + orderDetails +
                 '}';
     }
 }

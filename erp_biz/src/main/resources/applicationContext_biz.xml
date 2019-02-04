@@ -1,17 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context 
-		http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/tx 
-		http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/aop 
-		http://www.springframework.org/schema/aop/spring-aop.xsd
-		">   
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- 部门 -->
 	<bean id="depBiz" class="cn.itcast.erp.biz.impl.DepBiz">
 		<property name="depDao" ref="depDao"></property>
@@ -39,10 +30,14 @@
 	<!-- 订单明细 -->
 	<bean id="orderdetailBiz" class="cn.itcast.erp.biz.impl.OrderdetailBiz">
 		<property name="orderdetailDao" ref="orderdetailDao"></property>
+		<property name="storedetailDao" ref="storedetailDao"></property>
+		<property name="storeoperDao" ref="storeoperDao"></property>
 	</bean>
 	<!-- 订单 -->
 	<bean id="ordersBiz" class="cn.itcast.erp.biz.impl.OrdersBiz">
 		<property name="ordersDao" ref="ordersDao"></property>
+		<property name="empDao" ref="empDao"></property>
+		<property name="supplierDao" ref="supplierDao"></property>
 	</bean>
 	<!-- 退货订单明细 -->
 	<bean id="returnorderdetailBiz" class="cn.itcast.erp.biz.impl.ReturnorderdetailBiz">

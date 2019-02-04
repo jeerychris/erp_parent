@@ -1,9 +1,10 @@
 package cn.itcast.erp.dao.impl;
+
+import cn.itcast.erp.dao.IStoreoperDao;
+import cn.itcast.erp.entity.Storeoper;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import cn.itcast.erp.dao.IStoreoperDao;
-import cn.itcast.erp.entity.Storeoper;
 /**
  * 仓库操作记录数据访问类
  * @author Administrator
@@ -13,8 +14,8 @@ public class StoreoperDao extends BaseDao<Storeoper> implements IStoreoperDao {
 
 	/**
 	 * 构建查询条件
-	 * @param dep1
-	 * @param dep2
+	 * @param storeoper1
+	 * @param storeoper2
 	 * @param param
 	 * @return
 	 */

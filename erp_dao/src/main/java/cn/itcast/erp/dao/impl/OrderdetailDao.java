@@ -1,9 +1,10 @@
 package cn.itcast.erp.dao.impl;
+
+import cn.itcast.erp.dao.IOrderdetailDao;
+import cn.itcast.erp.entity.Orderdetail;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import cn.itcast.erp.dao.IOrderdetailDao;
-import cn.itcast.erp.entity.Orderdetail;
 /**
  * 订单明细数据访问类
  * @author Administrator
@@ -13,8 +14,8 @@ public class OrderdetailDao extends BaseDao<Orderdetail> implements IOrderdetail
 
 	/**
 	 * 构建查询条件
-	 * @param dep1
-	 * @param dep2
+	 * @param orderdetail1
+	 * @param orderdetail2
 	 * @param param
 	 * @return
 	 */
