@@ -107,4 +107,71 @@ public class OrderdetailBiz extends BaseBiz<Orderdetail> implements IOrderdetail
 
 	}
 
+	/**
+	 * 出库
+	 */
+	public void doOutStore(Long uuid, Long storeuuid, Long empuuid) {
+		//******** 第1步 更新商品明细**********
+		//1. 获取明细信息
+		Orderdetail detail = orderdetailDao.get(uuid);
+		//2. 判断明细的状态，一定是未入库的
+		if (!Orderdetail.STATE_NOT_OUT.equals(detail.getState())) {
+			throw new ErpException("亲！该明细已经出库了，不能重复出库");
+		}
+		//3. 修改状态为已出库
+		detail.setState(Orderdetail.STATE_OUT);
+		//4. 出库时间
+		detail.setEndtime(new Date());
+		//5. 库管员
+		detail.setEnder(empuuid);
+		//6. 从哪个仓库出
+		detail.setStoreuuid(storeuuid);
+
+		//*******第2 步 更新商品仓库库存*********
+		//1. 构建查询的条件
+		Storedetail storedetail = new Storedetail();
+		storedetail.setGoodsuuid(detail.getGoodsuuid());
+		storedetail.setStoreuuid(storeuuid);
+		//2. 通过查询 检查是否存在库存信息
+		List<Storedetail> storeList = storedetailDao.getList(storedetail, null, null);
+		if (storeList.size() > 0) {
+			//存在的话，则应该累加它的数量
+			Storedetail sd = storeList.get(0);
+			sd.setNum(sd.getNum() - detail.getNum());
+			if (sd.getNum() < 0) {
+				throw new ErpException("库存不足");
+			}
+		} else {
+			throw new ErpException("库存不足");
+		}
+
+		//****** 第3步 添加操作记录*****
+		//1. 构建操作记录
+		Storeoper log = new Storeoper();
+		log.setEmpuuid(empuuid);
+		log.setGoodsuuid(detail.getGoodsuuid());
+		log.setNum(detail.getNum());
+		log.setOpertime(detail.getEndtime());
+		log.setStoreuuid(storeuuid);
+		log.setType(Storeoper.TYPE_OUT);
+		//2. 保存到数据库中
+		storeoperDao.add(log);
+
+		//**** 第4步 是否需要更新订单的状态********
+
+		//1. 构建查询条件
+		Orderdetail queryParam = new Orderdetail();
+		Orders orders = detail.getOrders();
+		queryParam.setOrders(orders);
+		//2. 查询订单下是否还存在状态为0的明细
+		queryParam.setState(Orderdetail.STATE_NOT_OUT);
+		//3. 调用 getCount方法，来计算是否存在状态为0的明细
+		long count = orderdetailDao.getCount(queryParam, null, null);
+		if (count == 0) {
+			//4. 所有的明细都已经出库了，则要更新订单的状态，关闭订单
+			orders.setState(Orders.STATE_OUT);
+			orders.setEndtime(detail.getEndtime());
+			orders.setEnder(empuuid);
+		}
+	}
 }

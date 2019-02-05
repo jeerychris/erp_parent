@@ -1,7 +1,7 @@
 //保存当编辑的行的索引
 var existEditIndex = -1;
 $(function () {
-    $('#grid').datagrid({
+    $('#ordersgrid').datagrid({
         columns: [[
             {
                 field: 'goodsuuid', title: '商品编号', width: 100, editor: {
@@ -77,17 +77,17 @@ $(function () {
                     //判断是否存在编辑的行
                     if (existEditIndex > -1) {
                         //关闭编辑
-                        $('#grid').datagrid('endEdit', existEditIndex);
+                        $('#ordersgrid').datagrid('endEdit', existEditIndex);
                     }
                     //增加一行, row参数:{goodsuuid:'',goodsname:'',price:''}
-                    $('#grid').datagrid('appendRow', {num: 0, money: 0});
+                    $('#ordersgrid').datagrid('appendRow', {num: 0, money: 0});
                     //获取所的行记录，数组
-                    var rows = $('#grid').datagrid('getRows');
+                    var rows = $('#ordersgrid').datagrid('getRows');
 
                     //设置当前编辑行的索引
                     existEditIndex = rows.length - 1;
                     //需要先设置它的编辑器，才能开启编辑状态
-                    $('#grid').datagrid('beginEdit', existEditIndex);
+                    $('#ordersgrid').datagrid('beginEdit', existEditIndex);
 
                 }
             }, '-', {
@@ -96,10 +96,10 @@ $(function () {
                 handler: function () {
                     //1. 存在编辑状态的行
                     if (existEditIndex > -1) {
-                        $('#grid').datagrid('endEdit', existEditIndex);
+                        $('#ordersgrid').datagrid('endEdit', existEditIndex);
                     }
                     //获取所有的明细
-                    var rows = $('#grid').datagrid('getRows');
+                    var rows = $('#ordersgrid').datagrid('getRows');
                     if (rows.length == 0) {
                         return;
                     }
@@ -109,7 +109,7 @@ $(function () {
                     formdata.json = JSON.stringify(rows);
                     //formdata['json']= JSON.stringify(rows);
                     $.ajax({
-                        url: 'orders_add',
+                        url: 'orders_add?t.type=' + Request['type'],
                         data: formdata,
                         dataType: 'json',
                         type: 'post',
@@ -119,7 +119,7 @@ $(function () {
                                     //清空供应商
                                     $('#supplier').combogrid('clear');
                                     //清空表格
-                                    $('#grid').datagrid('loadData', {
+                                    $('#ordersgrid').datagrid('loadData', {
                                         total: 0,
                                         rows: [],
                                         footer: [{num: '合计', money: 0}]
@@ -136,15 +136,15 @@ $(function () {
             //rowIndex：点击的行的索引值，该索引值从0开始。
             //rowData：对应于点击行的记录。
             //关闭当前可以编辑的行
-            $('#grid').datagrid('endEdit', existEditIndex);
+            $('#ordersgrid').datagrid('endEdit', existEditIndex);
             //设置当前可编辑的索引行
             existEditIndex = rowIndex;
-            $('#grid').datagrid('beginEdit', existEditIndex);
+            $('#ordersgrid').datagrid('beginEdit', existEditIndex);
         }
     });
 
     //加行脚
-    $('#grid').datagrid('reloadFooter', [{num: '合计', money: 0}]);
+    $('#ordersgrid').datagrid('reloadFooter', [{num: '合计', money: 0}]);
 
     //加载供应商下拉表格
     $('#supplier').combogrid({
@@ -159,7 +159,8 @@ $(function () {
             {field: 'contact', title: '联系人', width: 100},
             {field: 'tele', title: '联系电话', width: 100},
             {field: 'email', title: '邮件地址', width: 100}
-        ]]
+        ]],
+        mode: 'remote'
     });
 
 });
@@ -170,7 +171,7 @@ $(function () {
  * @returns
  */
 function getEditor(_field) {
-    return $('#grid').datagrid('getEditor', {index: existEditIndex, field: _field});
+    return $('#ordersgrid').datagrid('getEditor', {index: existEditIndex, field: _field});
 }
 
 /**
@@ -198,7 +199,7 @@ function cal() {
     $(moneyEditor.target).val(money);
 
     //更新表格中的数据,设置row json对象里的key对应的值
-    $('#grid').datagrid('getRows')[existEditIndex].money = money;
+    $('#ordersgrid').datagrid('getRows')[existEditIndex].money = money;
 }
 
 /**
@@ -229,7 +230,7 @@ function bindGridEditor() {
  */
 function sum() {
     //获取所有行
-    var rows = $('#grid').datagrid('getRows');
+    var rows = $('#ordersgrid').datagrid('getRows');
     var total = 0;
     //循环累计
     $.each(rows, function (i, row) {
@@ -238,7 +239,7 @@ function sum() {
     total = total.toFixed(2);
 
     //设置合计金额到行脚里去
-    $('#grid').datagrid('reloadFooter', [{num: '合计', money: total}]);
+    $('#ordersgrid').datagrid('reloadFooter', [{num: '合计', money: total}]);
 }
 
 /**
@@ -248,13 +249,13 @@ function sum() {
 function deleteRow(rowIndex) {
     //alert(JSON.stringify(data));
     //关闭编辑
-    $('#grid').datagrid('endEdit', existEditIndex);
+    $('#ordersgrid').datagrid('endEdit', existEditIndex);
     //删除行
-    $('#grid').datagrid('deleteRow', rowIndex);
+    $('#ordersgrid').datagrid('deleteRow', rowIndex);
 
-    var data = $('#grid').datagrid('getData');
+    var data = $('#ordersgrid').datagrid('getData');
     //重新加载数据
-    $('#grid').datagrid('loadData', data);
+    $('#ordersgrid').datagrid('loadData', data);
     //计算合计
     sum();
 }

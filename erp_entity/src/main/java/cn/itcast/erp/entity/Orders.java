@@ -28,6 +28,14 @@ public class Orders {
     public static final String STATE_END = "3";
 
     /**
+     * 未出库
+     */
+    public static final String STATE_NOT_OUT = "0";
+    /**
+     * 已出库
+     */
+    public static final String STATE_OUT = "1";
+    /**
      * 采购订单
      */
     public static final String TYPE_IN = "1";

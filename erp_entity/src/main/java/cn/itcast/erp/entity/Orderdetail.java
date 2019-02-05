@@ -2,6 +2,8 @@ package cn.itcast.erp.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.util.Date;
+
 /**
  * 订单明细实体类
  *
@@ -16,13 +18,22 @@ public class Orderdetail {
      * 已入库
      */
     public static final String STATE_IN = "1";
+    /**
+     * 未出库
+     */
+    public static final String STATE_NOT_OUT = "0";
+    /**
+     * 已出库
+     */
+    public static final String STATE_OUT = "1";
+
     private Long uuid;//编号
     private Long goodsuuid;//商品编号
     private String goodsname;//商品名称
     private Double price;//价格
     private Long num;//数量
     private Double money;//金额
-    private java.util.Date endtime;//结束日期
+    private Date endtime;//结束日期
     private Long ender;//库管员
     private Long storeuuid;//仓库编号
     private String state;//采购：0=未入库，1=已入库  销售：0=未出库，1=已出库
@@ -89,11 +100,11 @@ public class Orderdetail {
         this.money = money;
     }
 
-    public java.util.Date getEndtime() {
+    public Date getEndtime() {
         return endtime;
     }
 
-    public void setEndtime(java.util.Date endtime) {
+    public void setEndtime(Date endtime) {
         this.endtime = endtime;
     }
 

@@ -1,6 +1,5 @@
 package cn.itcast.erp.entity;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -24,6 +23,10 @@ public class Storeoper {
     private Long goodsuuid;//商品编号
     private Long num;//数量
     private String type;//1：入库 2：出库
+
+    private String empName;//员工名称
+    private String storeName;//仓库名称
+    private String goodsName;//商品名称
 
     public Long getUuid() {
         return uuid;
@@ -81,16 +84,43 @@ public class Storeoper {
         this.type = type;
     }
 
+    public String getEmpName() {
+        return empName;
+    }
+
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
     @Override
     public String toString() {
         return "Storeoper{" +
                 "uuid=" + uuid +
                 ", empuuid=" + empuuid +
-                ", opertime=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(opertime) +
+                ", opertime=" + opertime +
                 ", storeuuid=" + storeuuid +
                 ", goodsuuid=" + goodsuuid +
                 ", num=" + num +
-                ", type='" + type + '\'' +
+                ", type='" + type + '\'' + "(1：入库 2：出库)" +
+                ", empName='" + empName + '\'' +
+                ", storeName='" + storeName + '\'' +
+                ", goodsName='" + goodsName + '\'' +
                 '}';
     }
 }

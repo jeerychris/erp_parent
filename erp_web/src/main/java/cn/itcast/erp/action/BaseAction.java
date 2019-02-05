@@ -22,15 +22,21 @@ import java.util.Map;
 public class BaseAction<T> {
 
     private IBaseBiz<T> baseBiz;
-
-    public void setBaseBiz(IBaseBiz<T> baseBiz) {
-        this.baseBiz = baseBiz;
-    }
-
     //属性驱动:条件查询
     private T t1;
     private T t2;
     private Object param;
+    private int page;//页码
+    private int rows;//每页的记录数
+    /**
+     * 新增，修改
+     */
+    private T t;
+    private long id;
+
+    public void setBaseBiz(IBaseBiz<T> baseBiz) {
+        this.baseBiz = baseBiz;
+    }
 
     public T getT2() {
         return t2;
@@ -55,9 +61,6 @@ public class BaseAction<T> {
     public void setT1(T t1) {
         this.t1 = t1;
     }
-
-    private int page;//页码
-    private int rows;//每页的记录数
 
     public int getPage() {
         return page;
@@ -100,11 +103,6 @@ public class BaseAction<T> {
         write(listString);
     }
 
-    /**
-     * 新增，修改
-     */
-    private T t;
-
     public T getT() {
         return t;
     }
@@ -128,8 +126,6 @@ public class BaseAction<T> {
         }
         write(JSON.toJSONString(rtn));
     }
-
-    private long id;
 
     public long getId() {
         return id;
@@ -226,7 +222,7 @@ public class BaseAction<T> {
      *
      * @param jsonString
      */
-    public void write(String jsonString) {
+    protected void write(String jsonString) {
         try {
             //响应对象
             HttpServletResponse response = ServletActionContext.getResponse();

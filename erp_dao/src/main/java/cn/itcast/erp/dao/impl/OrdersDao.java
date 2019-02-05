@@ -1,35 +1,42 @@
 package cn.itcast.erp.dao.impl;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
+
 import cn.itcast.erp.dao.IOrdersDao;
 import cn.itcast.erp.entity.Orders;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+
 /**
  * 订单数据访问类
- * @author Administrator
  *
+ * @author Administrator
  */
 public class OrdersDao extends BaseDao<Orders> implements IOrdersDao {
 
-	/**
-	 * 构建查询条件
-	 * @param dep1
-	 * @param dep2
-	 * @param param
-	 * @return
-	 */
-	public DetachedCriteria getDetachedCriteria(Orders orders1,Orders orders2,Object param){
-		DetachedCriteria dc=DetachedCriteria.forClass(Orders.class);
-		if(orders1!=null){
-			if(null != orders1.getType() && orders1.getType().trim().length()>0){
-				dc.add(Restrictions.like("type", orders1.getType(), MatchMode.ANYWHERE));
-			}
-			if(null != orders1.getState() && orders1.getState().trim().length()>0){
-				dc.add(Restrictions.like("state", orders1.getState(), MatchMode.ANYWHERE));
-			}
-
-		}
-		return dc;
-	}
+    /**
+     * 构建查询条件
+     *
+     * @param orders1
+     * @param orders2
+     * @param param
+     * @return
+     */
+    public DetachedCriteria getDetachedCriteria(Orders orders1, Orders orders2, Object param) {
+        DetachedCriteria dc = DetachedCriteria.forClass(Orders.class);
+        if (orders1 != null) {
+            //根据订单类型查询
+            if (null != orders1.getType() && orders1.getType().trim().length() > 0) {
+                dc.add(Restrictions.eq("type", orders1.getType()));
+            }
+            //根据订单状态查询
+            if (null != orders1.getState() && orders1.getState().trim().length() > 0) {
+                dc.add(Restrictions.eq("state", orders1.getState()));
+            }
+            //根据订单的创建者查询
+            if (null != orders1.getCreater()) {
+                dc.add(Restrictions.eq("creater", orders1.getCreater()));
+            }
+        }
+        return dc;
+    }
 
 }
