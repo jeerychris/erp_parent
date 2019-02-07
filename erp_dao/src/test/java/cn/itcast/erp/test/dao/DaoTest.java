@@ -11,7 +11,7 @@ public class DaoTest {
     public void test() {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:applicationContext*.xml");
         IDepDao depDao = (IDepDao) applicationContext.getBean("depDao");
-        System.out.println(depDao.getList());
+        System.out.println(depDao.getList(null, null, null));
     }
 
 }

@@ -20,6 +20,6 @@ public class DaoAnnotationTest {
     public void listTest() {
         Dep dep = new Dep();
         dep.setTele("5");
-        System.out.println(depDao.getList(dep));
+        System.out.println(depDao.getList(dep, null, null));
     }
 }
