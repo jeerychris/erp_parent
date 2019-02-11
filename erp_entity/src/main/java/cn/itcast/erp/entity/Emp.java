@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 员工实体类
@@ -23,6 +24,8 @@ public class Emp {
     private String address;//联系地址
     private Date birthday;//出生年月日
     private Dep dep;//部门
+    @JSONField(serialize = false)
+    private List<Role> roles;
 
     public Dep getDep() {
         return dep;
@@ -110,6 +113,14 @@ public class Emp {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

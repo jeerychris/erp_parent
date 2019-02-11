@@ -1,6 +1,10 @@
 package cn.itcast.erp.action;
 import cn.itcast.erp.biz.IEmpBiz;
 import cn.itcast.erp.entity.Emp;
+import cn.itcast.erp.entity.Tree;
+import com.alibaba.fastjson.JSON;
+
+import java.util.List;
 
 /**
  * 员工Action 
@@ -10,14 +14,14 @@ import cn.itcast.erp.entity.Emp;
 public class EmpAction extends BaseAction<Emp> {
 
 	private IEmpBiz empBiz;
+	private String oldPwd;//旧密码
+	private String newPwd;//新密码
+	private String checkedStr;//勾选中角色的ID字符串，以逗号分割
 
 	public void setEmpBiz(IEmpBiz empBiz) {
 		this.empBiz = empBiz;
 		super.setBaseBiz(this.empBiz);
 	}
-	
-	private String oldPwd;//旧密码
-	private String newPwd;//新密码
 
 	public String getOldPwd() {
 		return oldPwd;
@@ -33,6 +37,14 @@ public class EmpAction extends BaseAction<Emp> {
 
 	public void setNewPwd(String newPwd) {
 		this.newPwd = newPwd;
+	}
+
+	public String getCheckedStr() {
+		return checkedStr;
+	}
+
+	public void setCheckedStr(String checkedStr) {
+		this.checkedStr = checkedStr;
 	}
 
 	/**
@@ -67,4 +79,23 @@ public class EmpAction extends BaseAction<Emp> {
 			ajaxReturn(false, "重置密码失败");
 		}
 	}
+
+	/**
+	 * 获取用户角色
+	 */
+	public void readEmpRoles() {
+		List<Tree> roleList = empBiz.readEmpRoles(getId());
+		write(JSON.toJSONString(roleList));
+	}
+
+	public void updateEmpRoles() {
+		try {
+			empBiz.updateEmpRoles(getId(), checkedStr);
+			ajaxReturn(true, "更新用户角色成功");
+		} catch (Exception e) {
+			ajaxReturn(false, "更新用户角色失败");
+			e.printStackTrace();
+		}
+	}
+
 }
