@@ -1,6 +1,10 @@
 package cn.itcast.erp.biz;
 
 import cn.itcast.erp.entity.Orders;
+import com.redsum.bos.ws.Waybilldetail;
+
+import java.io.OutputStream;
+import java.util.List;
 
 /**
  * 订单业务逻辑层接口
@@ -25,5 +29,17 @@ public interface IOrdersBiz extends IBaseBiz<Orders> {
      */
     public void doStart(Long uuid, Long empUuid);
 
+    /**
+     * 导出订单
+     *
+     * @param os
+     * @param uuid 订单编号
+     */
+    void export(OutputStream os, Long uuid);
+
+    /**
+     * 根据运单号查询运单详情
+     */
+    public List<Waybilldetail> waybilldetailList(Long sn);
 }
 

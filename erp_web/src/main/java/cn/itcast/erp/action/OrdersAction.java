@@ -6,7 +6,11 @@ import cn.itcast.erp.entity.Orderdetail;
 import cn.itcast.erp.entity.Orders;
 import cn.itcast.erp.exception.ErpException;
 import com.alibaba.fastjson.JSON;
+import com.redsum.bos.ws.Waybilldetail;
+import org.apache.struts2.ServletActionContext;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -18,6 +22,12 @@ public class OrdersAction extends BaseAction<Orders> {
 
     private IOrdersBiz ordersBiz;
     private String json;
+    private Long waybillsn;
+
+    public void setOrdersBiz(IOrdersBiz ordersBiz) {
+        this.ordersBiz = ordersBiz;
+        super.setBaseBiz(this.ordersBiz);
+    }
 
     public String getJson() {
         return json;
@@ -27,9 +37,12 @@ public class OrdersAction extends BaseAction<Orders> {
         this.json = json;
     }
 
-    public void setOrdersBiz(IOrdersBiz ordersBiz) {
-        this.ordersBiz = ordersBiz;
-        super.setBaseBiz(this.ordersBiz);
+    public Long getWaybillsn() {
+        return waybillsn;
+    }
+
+    public void setWaybillsn(Long waybillsn) {
+        this.waybillsn = waybillsn;
     }
 
     @Override
@@ -119,4 +132,29 @@ public class OrdersAction extends BaseAction<Orders> {
         super.listByPage();
     }
 
+    /**
+     * 导出订单
+     */
+    public void export() {
+        String filename = "Orders_" + getId() + ".xls";
+        //响应对象
+        HttpServletResponse response = ServletActionContext.getResponse();
+        try {
+            //设置输出流,实现下载文件
+            response.setHeader("Content-Disposition", "attachment;filename=" +
+                    new String(filename.getBytes(), "ISO-8859-1"));
+
+            ordersBiz.export(response.getOutputStream(), getId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 根据运单号查询运单详情
+     */
+    public void waybilldetailList() {
+        List<Waybilldetail> waybilldetailList = ordersBiz.waybilldetailList(waybillsn);
+        write(JSON.toJSONString(waybilldetailList));
+    }
 }

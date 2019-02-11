@@ -1,9 +1,10 @@
 package cn.itcast.erp.dao.impl;
+
+import cn.itcast.erp.dao.ISupplierDao;
+import cn.itcast.erp.entity.Supplier;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import cn.itcast.erp.dao.ISupplierDao;
-import cn.itcast.erp.entity.Supplier;
 /**
  * 供应商数据访问类
  * @author Administrator
@@ -13,8 +14,8 @@ public class SupplierDao extends BaseDao<Supplier> implements ISupplierDao {
 
 	/**
 	 * 构建查询条件
-	 * @param dep1
-	 * @param dep2
+     * @param supplier1
+     * @param supplier2
 	 * @param param
 	 * @return
 	 */
@@ -40,7 +41,12 @@ public class SupplierDao extends BaseDao<Supplier> implements ISupplierDao {
 			if(null != supplier1.getType() && supplier1.getType().trim().length()>0){
 				dc.add(Restrictions.eq("type", supplier1.getType()));
 			}
-
+        }
+        if (null != supplier2) {
+            //精确根据名称查询
+            if (null != supplier2.getName() && supplier2.getName().trim().length() > 0) {
+                dc.add(Restrictions.eq("name", supplier2.getName()));
+            }
 		}
 		return dc;
 	}

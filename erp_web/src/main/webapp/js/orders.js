@@ -57,6 +57,7 @@ $(function () {
             //rowData， 行里的数据
             //alert(JSON.stringify(rowData));
             //显示详情
+            $('#waybillsn').html(rowData.waybillsn);
             $('#uuid').html(rowData.uuid);
             $('#suppliername').html(rowData.supplierName);
             $('#state').html(getState(rowData.state));
@@ -68,6 +69,33 @@ $(function () {
             $('#checktime').html(formatDate(rowData.checktime));
             $('#starttime').html(formatDate(rowData.starttime));
             $('#endtime').html(formatDate(rowData.endtime));
+
+            //销售订单已经出库
+            if (rowData.state * 1 == 1 && rowData.type * 1 == 2) {
+                //添加详情的按钮
+                var options = $('#ordersDlg').dialog('options');
+                var toolbar = options.toolbar;
+                toolbar.push({
+                    text: '运单详情',
+                    iconCls: 'icon-search',
+                    handler: function () {
+                        $('#waybillDlg').dialog('open');
+                        $('#waybillgrid').datagrid({
+                            url: 'orders_waybilldetailList?waybillsn=' + $('#waybillsn').html(),
+                            columns: [[
+                                {field: 'exedate', title: '执行日期', width: 100},
+                                {field: 'exetime', title: '执行时间', width: 100},
+                                {field: 'info', title: '执行信息', width: 100}
+                            ]],
+                            rownumbers: true
+                        });
+                    }
+                });
+                //重新渲染工具栏
+                $('#ordersDlg').dialog({
+                    toolbar: toolbar
+                });
+            }
             //打开窗口
             $('#ordersDlg').dialog('open');
             //加载明细列表
@@ -91,26 +119,32 @@ $(function () {
     });
 
     //添加审核按钮
+    var toolbar = new Array();
     if (Request['oper'] == 'doCheck') {
-        $('#ordersDlg').dialog({
-            toolbar: [{
-                text: '审核',
-                iconCls: 'icon-search',
-                handler: doCheck
-            }]
+        toolbar.push({
+            text: '审核',
+            iconCls: 'icon-search',
+            handler: doCheck
         });
     }
 
     //添加审核按钮
     if (Request['oper'] == 'doStart') {
-        $('#ordersDlg').dialog({
-            toolbar: [{
-                text: '确认',
-                iconCls: 'icon-search',
-                handler: doStart
-            }]
+        toolbar.push({
+            text: '确认',
+            iconCls: 'icon-search',
+            handler: doStart
         });
     }
+    //添加导出按钮
+    toolbar.push({
+        text: '导出',
+        iconCls: 'icon-excel',
+        handler: doExport
+    });
+    $('#ordersDlg').dialog({
+        toolbar: toolbar
+    });
     //添加双击事件
     if (Request['oper'] == 'doInStore' || Request['oper'] == 'doOutStore') {
         $('#itemgrid').datagrid({
@@ -380,4 +414,8 @@ function getColumns() {
             {field: 'waybillsn', title: '运单号', width: 100}
         ]];
     }
+}
+
+function doExport() {
+    $.download("orders_export", {"id": $('#uuid').html()});
 }

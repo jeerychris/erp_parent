@@ -12,6 +12,7 @@
     <script type="text/javascript" src="ui/jquery.serializejson.min.js"></script>
     <script type="text/javascript" src="ui/date.js"></script>
     <script type="text/javascript" src="ui/request.js"></script>
+    <script type="text/javascript" src="ui/download.js"></script>
     <script type="text/javascript" src="js/orders.js"></script>
     <script type="text/javascript" src="js/orders_add.js"></script>
 </head>
@@ -50,6 +51,16 @@
             <td class="bg noBorderBottom">入库日期</td>
             <td class="noBorderBottom" id="endtime"></td>
         </tr>
+        <tr>
+            <td class="bg noBorderBottom">运单号</td>
+            <td class="noBorderBottom" id="waybillsn"></td>
+            <td class="bg noBorderBottom"></td>
+            <td class="noBorderBottom"></td>
+            <td class="bg noBorderBottom"></td>
+            <td class="noBorderBottom"></td>
+            <td class="bg noBorderBottom"></td>
+            <td class="noBorderBottom"></td>
+        </tr>
     </table>
     <table id="itemgrid"></table>
 </div>
@@ -87,6 +98,13 @@
         <div style="height:2px;"></div>
     </form>
     <table id="ordersgrid"></table>
+</div>
+
+<!--waybill dialogue-->
+<div id="waybillDlg" style="padding:2px;" class="easyui-dialog" data-options="
+		title:'运单详情',width:500,height:300,modal:true,closed:true
+	">
+    <table id="waybillgrid"></table>
 </div>
 
 </body>

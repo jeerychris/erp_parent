@@ -3,6 +3,7 @@ import cn.itcast.erp.biz.IStoredetailBiz;
 import cn.itcast.erp.dao.IGoodsDao;
 import cn.itcast.erp.dao.IStoreDao;
 import cn.itcast.erp.dao.IStoredetailDao;
+import cn.itcast.erp.entity.Storealert;
 import cn.itcast.erp.entity.Storedetail;
 
 import java.util.HashMap;
@@ -75,4 +76,15 @@ public class StoredetailBiz extends BaseBiz<Storedetail> implements IStoredetail
 
 		return storeName;
 	}
+
+    /**
+     * 获取仓库预警列表
+     *
+     * @return
+     */
+    @Override
+    public List<Storealert> getStorealertList() {
+        return storedetailDao.getStorealertList();
+    }
+
 }

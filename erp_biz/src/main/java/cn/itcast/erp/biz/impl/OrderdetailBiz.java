@@ -4,11 +4,10 @@ import cn.itcast.erp.biz.IOrderdetailBiz;
 import cn.itcast.erp.dao.IOrderdetailDao;
 import cn.itcast.erp.dao.IStoredetailDao;
 import cn.itcast.erp.dao.IStoreoperDao;
-import cn.itcast.erp.entity.Orderdetail;
-import cn.itcast.erp.entity.Orders;
-import cn.itcast.erp.entity.Storedetail;
-import cn.itcast.erp.entity.Storeoper;
+import cn.itcast.erp.dao.ISupplierDao;
+import cn.itcast.erp.entity.*;
 import cn.itcast.erp.exception.ErpException;
+import com.redsum.bos.ws.impl.IWaybillWs;
 
 import java.util.Date;
 import java.util.List;
@@ -22,6 +21,8 @@ public class OrderdetailBiz extends BaseBiz<Orderdetail> implements IOrderdetail
 	private IOrderdetailDao orderdetailDao;
 	private IStoredetailDao storedetailDao;
 	private IStoreoperDao storeoperDao;
+	private ISupplierDao supplierDao;
+	private IWaybillWs waybillWs;
 
 	public void setStoredetailDao(IStoredetailDao storedetailDao) {
 		this.storedetailDao = storedetailDao;
@@ -34,6 +35,14 @@ public class OrderdetailBiz extends BaseBiz<Orderdetail> implements IOrderdetail
 	public void setOrderdetailDao(IOrderdetailDao orderdetailDao) {
 		this.orderdetailDao = orderdetailDao;
 		super.setBaseDao(this.orderdetailDao);
+	}
+
+	public void setSupplierDao(ISupplierDao supplierDao) {
+		this.supplierDao = supplierDao;
+	}
+
+	public void setWaybillWs(IWaybillWs waybillWs) {
+		this.waybillWs = waybillWs;
 	}
 
 	/**
@@ -172,6 +181,12 @@ public class OrderdetailBiz extends BaseBiz<Orderdetail> implements IOrderdetail
 			orders.setState(Orders.STATE_OUT);
 			orders.setEndtime(detail.getEndtime());
 			orders.setEnder(empuuid);
+			//客户
+			Supplier supplier = supplierDao.get(orders.getSupplieruuid());
+			//在线预约下单,获取运单号
+			Long waybillsn = waybillWs.addWaybill(1l, supplier.getAddress(), supplier.getContact(), supplier.getTele(), "--");
+			//更新运单号
+			orders.setWaybillsn(waybillsn);
 		}
 	}
 }
