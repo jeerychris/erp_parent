@@ -4,7 +4,8 @@ import cn.itcast.erp.biz.IBaseBiz;
 import cn.itcast.erp.entity.Emp;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.opensymphony.xwork2.ActionContext;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
 
 import javax.servlet.http.HttpServletResponse;
@@ -239,7 +240,9 @@ public class BaseAction<T> {
      *
      * @return
      */
-    public Emp getLoginUser() {
-        return (Emp) ActionContext.getContext().getSession().get("loginUser");
+    public Emp getUser() {
+//        return (Emp) ActionContext.getContext().getSession().get("loginUser");
+        Subject subject = SecurityUtils.getSubject();
+        return (Emp) subject.getPrincipal();
     }
 }

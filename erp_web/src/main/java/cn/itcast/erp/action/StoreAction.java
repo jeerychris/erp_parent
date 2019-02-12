@@ -25,7 +25,7 @@ public class StoreAction extends BaseAction<Store> {
             //构建查询条件
             setT1(new Store());
         }
-        Emp loginUser = getLoginUser();
+        Emp loginUser = getUser();
         //查找当前登陆用户下的仓库
         getT1().setEmpuuid(loginUser.getUuid());
         super.list();

@@ -1,9 +1,11 @@
 package cn.itcast.erp.action;
 
-import cn.itcast.erp.biz.IEmpBiz;
 import cn.itcast.erp.entity.Emp;
 import com.alibaba.fastjson.JSON;
-import com.opensymphony.xwork2.ActionContext;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,10 +17,11 @@ public class LoginAction {
 
 	private String username;//登陆用户名
 	private String pwd;//密码
-	private IEmpBiz empBiz;
-	public void setEmpBiz(IEmpBiz empBiz) {
-		this.empBiz = empBiz;
-	}
+
+	//	private IEmpBiz empBiz;
+//	public void setEmpBiz(IEmpBiz empBiz) {
+//		this.empBiz = empBiz;
+//	}
 	public String getUsername() {
 		return username;
 	}
@@ -33,19 +36,33 @@ public class LoginAction {
 	}
 	
 	public void checkUser(){
+//		try{
+//			//查询是否存在
+//			Emp loginUser = empBiz.findByUsernameAndPwd(username, pwd);
+//			if(loginUser != null){
+//				//记录当前登陆的用记
+//				ActionContext.getContext().getSession().put("loginUser", loginUser);
+//				ajaxReturn(true, "");
+//			}else{
+//				ajaxReturn(false, "用户名或密码不正确");
+//			}
+//		}catch(Exception ex){
+//			ex.printStackTrace();
+//			ajaxReturn(false, "登陆失败");
+//		}
+
+		//1.创建令牌（对用户和密码的封装）
+		UsernamePasswordToken token = new UsernamePasswordToken(username, pwd);
+
+		//2.获得subject（主题，当前用户操作类，封装了一系列的操作，应用程序与shiro交互的入口部分）
+		Subject subject = SecurityUtils.getSubject();
+		//3.执行认证
 		try{
-			//查询是否存在
-			Emp loginUser = empBiz.findByUsernameAndPwd(username, pwd);
-			if(loginUser != null){
-				//记录当前登陆的用记
-				ActionContext.getContext().getSession().put("loginUser", loginUser);
-				ajaxReturn(true, "");
-			}else{
-				ajaxReturn(false, "用户名或密码不正确");
-			}
-		}catch(Exception ex){
-			ex.printStackTrace();
-			ajaxReturn(false, "登陆失败");
+			subject.login(token);
+			ajaxReturn(true, "登录成功");
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+			ajaxReturn(true, "用户名或密码不正确");
 		}
 	}
 	
@@ -54,7 +71,8 @@ public class LoginAction {
 	 */
 	public void showName(){
 		//获取当前登陆的用户
-		Emp emp = (Emp) ActionContext.getContext().getSession().get("loginUser");
+		Subject subject = SecurityUtils.getSubject();
+		Emp emp = (Emp) subject.getPrincipal();
 		//session是否会超时，用户是否登陆过了
 		if(null != emp){
 			ajaxReturn(true, emp.getName());
@@ -67,7 +85,9 @@ public class LoginAction {
 	 * 退出登陆
 	 */
 	public void loginOut(){
-		ActionContext.getContext().getSession().remove("loginUser");
+//		ActionContext.getContext().getSession().remove("loginUser");
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
 		ajaxReturn(true, "");
 	}
 	

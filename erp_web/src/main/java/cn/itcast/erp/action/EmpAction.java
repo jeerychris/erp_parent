@@ -51,7 +51,7 @@ public class EmpAction extends BaseAction<Emp> {
 	 * 修改密码调用的方法
 	 */
 	public void updatePwd(){
-		Emp loginUser = getLoginUser();
+        Emp loginUser = getUser();
 		//session是否会超时，用户是否登陆过了
 		if(null == loginUser){
 			ajaxReturn(false, "亲，您还没有登陆");

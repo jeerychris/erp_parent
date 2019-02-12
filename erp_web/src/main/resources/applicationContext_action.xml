@@ -67,7 +67,7 @@
 
 	<!-- 登陆/退出 -->
 	<bean id="loginAction" class="cn.itcast.erp.action.LoginAction" scope="prototype">
-		<property name="empBiz" ref="empBiz"></property>
+        <!--<property name="empBiz" ref="empBiz"></property>-->
 	</bean>
 
 	<bean id="reportAction" class="cn.itcast.erp.action.ReportAction" scope="prototype">

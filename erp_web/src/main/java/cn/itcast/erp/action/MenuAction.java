@@ -35,7 +35,7 @@ public class MenuAction extends BaseAction<Menu> {
      */
     public void getMenuTree() {
         //通过获取主菜单，自关联就会带其下所有的菜单
-        Menu menu = menuBiz.readMenuByEmpuuid(getLoginUser().getUuid());
+        Menu menu = menuBiz.readMenuByEmpuuid(getUser().getUuid());
         write(JSON.toJSONString(menu));
     }
 

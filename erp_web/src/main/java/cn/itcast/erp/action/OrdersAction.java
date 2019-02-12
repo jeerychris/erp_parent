@@ -47,7 +47,7 @@ public class OrdersAction extends BaseAction<Orders> {
 
     @Override
     public void add() {
-        Emp loginUser = getLoginUser();
+        Emp loginUser = getUser();
         if (null == loginUser) {
             //用户没有登陆，session已失效
             ajaxReturn(false, "亲！您还没有登陆");
@@ -76,7 +76,7 @@ public class OrdersAction extends BaseAction<Orders> {
      */
     public void doCheck() {
         //获取当前登陆用户
-        Emp loginUser = getLoginUser();
+        Emp loginUser = getUser();
         if (null == loginUser) {
             //用户没有登陆，session已失效
             ajaxReturn(false, "亲！您还没有登陆");
@@ -99,7 +99,7 @@ public class OrdersAction extends BaseAction<Orders> {
      */
     public void doStart() {
         //获取当前登陆用户
-        Emp loginUser = getLoginUser();
+        Emp loginUser = getUser();
         if (null == loginUser) {
             //用户没有登陆，session已失效
             ajaxReturn(false, "亲！您还没有登陆");
@@ -125,7 +125,7 @@ public class OrdersAction extends BaseAction<Orders> {
             //构建查询条件
             setT1(new Orders());
         }
-        Emp loginUser = getLoginUser();
+        Emp loginUser = getUser();
         //登陆用户的编号查询
         getT1().setCreater(loginUser.getUuid());
 

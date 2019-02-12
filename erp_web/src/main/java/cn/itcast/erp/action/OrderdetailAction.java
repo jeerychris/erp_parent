@@ -31,7 +31,7 @@ public class OrderdetailAction extends BaseAction<Orderdetail> {
 	 * 入库
 	 */
 	public void doInStore() {
-		Emp loginUser = getLoginUser();
+        Emp loginUser = getUser();
 		if (null == loginUser) {
 			//用户没有登陆，session已失效
 			ajaxReturn(false, "亲！您还没有登陆");
@@ -53,7 +53,7 @@ public class OrderdetailAction extends BaseAction<Orderdetail> {
 	 * 入库
 	 */
 	public void doOutStore() {
-		Emp loginUser = getLoginUser();
+        Emp loginUser = getUser();
 		if (null == loginUser) {
 			//用户没有登陆，session已失效
 			ajaxReturn(false, "亲！您还没有登陆");
