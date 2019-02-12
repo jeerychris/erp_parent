@@ -8,6 +8,7 @@ import cn.itcast.erp.entity.Role;
 import cn.itcast.erp.entity.Tree;
 import cn.itcast.erp.exception.ErpException;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class EmpBiz extends BaseBiz<Emp> implements IEmpBiz {
 
     private IEmpDao empDao;
     private IRoleDao roleDao;
+    private Jedis jedis;
 
     public void setEmpDao(IEmpDao empDao) {
         this.empDao = empDao;
@@ -31,6 +33,10 @@ public class EmpBiz extends BaseBiz<Emp> implements IEmpBiz {
 
     public void setRoleDao(IRoleDao roleDao) {
         this.roleDao = roleDao;
+    }
+
+    public void setJedis(Jedis jedis) {
+        this.jedis = jedis;
     }
 
     /**
@@ -141,6 +147,11 @@ public class EmpBiz extends BaseBiz<Emp> implements IEmpBiz {
             role = roleDao.get(Long.valueOf(id));
             //设置用户的角色
             emp.getRoles().add(role);
+        }
+        try {
+            jedis.del("menuList_" + uuid);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

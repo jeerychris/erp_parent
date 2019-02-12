@@ -64,6 +64,9 @@ public class OrdersAction extends BaseAction<Orders> {
             //System.out.println(detailList.size());
             ordersBiz.add(orders);
             ajaxReturn(true, "添加订单成功");
+        } catch (ErpException e) {
+            ajaxReturn(false, e.getMessage());
+            e.printStackTrace();
         } catch (Exception e) {
             ajaxReturn(false, "添加订单失败");
             e.printStackTrace();

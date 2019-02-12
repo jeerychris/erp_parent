@@ -3,6 +3,8 @@ package cn.itcast.erp.biz.impl;
 import cn.itcast.erp.biz.IMenuBiz;
 import cn.itcast.erp.dao.IMenuDao;
 import cn.itcast.erp.entity.Menu;
+import com.alibaba.fastjson.JSON;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +17,15 @@ import java.util.List;
 public class MenuBiz extends BaseBiz<Menu> implements IMenuBiz {
 
 	private IMenuDao menuDao;
-	
+	private Jedis jedis;
+
 	public void setMenuDao(IMenuDao menuDao) {
 		this.menuDao = menuDao;
 		super.setBaseDao(this.menuDao);
+	}
+
+	public void setJedis(Jedis jedis) {
+		this.jedis = jedis;
 	}
 
 	/**
@@ -29,22 +36,20 @@ public class MenuBiz extends BaseBiz<Menu> implements IMenuBiz {
 	 */
 	@Override
 	public List<Menu> getMenusByEmpuuid(Long empUuid) {
-//
-//		//尝试从redisz中提取缓存
-//		String menuListJson=jedis.get("menuList_"+empUuid);
-//		if(menuListJson!=null){
-//			List<Menu> menus=JSON.parseArray(menuListJson,Menu.class);
-//			System.out.println("从redis中提取菜单记录。。。。。");
-//			return menus;
-//		}else{
-//			//如果redis中没有则提取数据库 中的记录
-//			List<Menu> menus=menuDao.getMenusByEmpuuid(empUuid);
-//			jedis.set("menuList_"+empUuid,JSON.toJSONString(menus));
-//			System.out.println("从数据库中提取菜单记录。。。。。");
-//			return menus;
-//		}
 
-		return menuDao.getMenusByEmpuuid(empUuid);
+		//尝试从redisz中提取缓存
+		String menuListJson = jedis.get("menuList_" + empUuid);
+		if (menuListJson != null) {
+			List<Menu> menus = JSON.parseArray(menuListJson, Menu.class);
+			System.out.println("从redis中提取菜单记录。。。。。");
+			return menus;
+		} else {
+			//如果redis中没有则提取数据库 中的记录
+			List<Menu> menus = menuDao.getMenusByEmpuuid(empUuid);
+			jedis.set("menuList_" + empUuid, JSON.toJSONString(menus));
+			System.out.println("从数据库中提取菜单记录。。。。。");
+			return menus;
+		}
 
 	}
 

@@ -8,6 +8,7 @@ import cn.itcast.erp.dao.ISupplierDao;
 import cn.itcast.erp.entity.*;
 import cn.itcast.erp.exception.ErpException;
 import com.redsum.bos.ws.impl.IWaybillWs;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import java.util.Date;
 import java.util.List;
@@ -48,6 +49,7 @@ public class OrderdetailBiz extends BaseBiz<Orderdetail> implements IOrderdetail
 	/**
 	 * 入库
 	 */
+	@RequiresPermissions("采购入库")
 	public void doInStore(Long uuid, Long storeuuid, Long empuuid) {
 		//******** 第1步 更新商品明细**********
 		//1. 获取明细信息
@@ -119,6 +121,7 @@ public class OrderdetailBiz extends BaseBiz<Orderdetail> implements IOrderdetail
 	/**
 	 * 出库
 	 */
+	@RequiresPermissions("销售订单出库")
 	public void doOutStore(Long uuid, Long storeuuid, Long empuuid) {
 		//******** 第1步 更新商品明细**********
 		//1. 获取明细信息

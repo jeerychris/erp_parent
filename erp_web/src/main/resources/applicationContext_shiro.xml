@@ -47,34 +47,45 @@
                 /report_trend.html= perms["销售趋势分析"]
                 /report_trend*.action= perms["销售趋势分析"]
 
-                /roleMenuSet.html=perms["角色权限设置"]
-                /role_readRoleMenus.action=perms["角色权限设置"]
-                /role_updateRoleMenus.action=perms["角色权限设置"]
+                /roleMenuSet.html=perms["角色菜单设置"]
+                /role_readRoleMenus.action=perms["角色菜单设置"]
+                /role_readRoleMenus*=perms["角色菜单设置"]
+                /role_updateRoleMenus.action=perms["角色菜单设置"]
+                /role_updateRoleMenus*=perms["角色菜单设置"]
 
                 /empRoleSet.html=perms["用户角色设置"]
                 /emp_readEmpRoles.action=perms["用户角色设置"]
+                /emp_readEmpRoles*=perms["用户角色设置"]
                 /emp_updateEmpRoles.action=perms["用户角色设置"]
+                /emp_updateEmpRoles*=perms["用户角色设置"]
 
                 /role.html= perms["角色设置"]
                 /role_*.action= perms["角色设置"]
+                /role_*= perms["角色设置"]
 
-                /goodstype.html= perms["商品类型管理"]
-                /goodstype_*.action= perms["商品类型管理"]
+                /goodstype.html= perms["商品类型"]
+                /goodstype_*.action= perms["商品类型"]
+                /goodstype_*= perms["商品类型"]
 
-                /goods.html= perms["商品管理"]
-                /goods_*.action= perms["商品管理"]
+                /goods.html= perms["商品"]
+                /goods_*.action= perms["商品"]
+                /goods_*= perms["商品"]
 
                 /supplier.html = perms["供应商管理","客户管理"]
                 /supplier_*.action = perms["供应商管理","客户管理"]
+                /supplier_* = perms["供应商管理","客户管理"]
 
                 /store.html= perms["仓库"]
                 /store_*.action= perms["仓库"]
+                /store_*= perms["仓库"]
 
-                /emp.html= perms["员工管理"]
-                /emp_*.action= perms["员工管理"]
+                /emp.html= perms["员工"]
+                /emp_*.action= perms["员工"]
+                /emp_*= perms["员工"]
 
-                /dep.html= perms["部门管理"]
-                /dep_*.action= perms["部门管理"]
+                /dep.html= perms["部门"]
+                /dep_*.action= perms["部门"]
+                /dep_*= perms["部门"]
 
                 /*.html = authc
                 /*.action = authc
@@ -85,15 +96,29 @@
     </bean>
 
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <property name="realm" ref="erpRealm"></property>
+        <property name="realm" ref="erpRealm"/>
     </bean>
 
     <!-- 自定义Realm -->
     <bean id="erpRealm" class="cn.itcast.erp.realm.ErpRealm">
-        <property name="empBiz" ref="empBiz"></property>
-        <property name="menuBiz" ref="menuBiz"></property>
+        <property name="empBiz" ref="empBiz"/>
+        <property name="menuBiz" ref="menuBiz"/>
     </bean>
 
     <bean id="myFilter" class="cn.itcast.erp.filter.MyFilter"/>
+    <!-- 启动shiro注解 -->
+    <bean
+            class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+            depends-on="lifecycleBeanPostProcessor">
+        <!-- 默认使用JDK代理 ，如被代理类没有实现接口，必须使用下列配置开启 cglib代理  -->
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!-- 对安全管理器 增强代码 ， spring 后处理器 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
 </beans>

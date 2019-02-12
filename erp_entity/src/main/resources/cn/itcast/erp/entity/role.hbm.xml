@@ -12,8 +12,12 @@
         <!-- 多对多关联配置， 角色权限中间表 role_menu -->
         <property name="name"/>
         <bag name="menus" order-by="menuuuid" table="role_menu">
-            <key column="roleuuid"></key>
-            <many-to-many column="menuuuid" class="cn.itcast.erp.entity.Menu"></many-to-many>
+            <key column="roleuuid"/>
+            <many-to-many column="menuuuid" class="cn.itcast.erp.entity.Menu"/>
+        </bag>
+        <bag name="emps" order-by="empuuid" table="emp_role">
+            <key column="roleuuid"/>
+            <many-to-many column="empuuid" class="cn.itcast.erp.entity.Emp"/>
         </bag>
 
     </class>
