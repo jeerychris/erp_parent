@@ -14,7 +14,7 @@
     </modules>
 
     <properties>
-        <spring.version>4.3.17.RELEASE</spring.version>
+        <spring.version>4.3.18.RELEASE</spring.version>
         <struts.version>2.3.35</struts.version>
         <hibernate.version>5.0.7.Final</hibernate.version>
         <shiro.version>1.2.3</shiro.version>
@@ -134,7 +134,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.31</version>
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
